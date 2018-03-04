@@ -43,4 +43,4 @@ public class MiniMusicPlayer2 implements ControllerEventListener {
 		}catch(Exception e){}
 			return event;
 	}
-}
+}//close

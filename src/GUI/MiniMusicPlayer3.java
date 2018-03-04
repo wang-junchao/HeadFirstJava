@@ -87,4 +87,4 @@ public class MiniMusicPlayer3 {
 			}
 		}
 	}
-}
+}//close
