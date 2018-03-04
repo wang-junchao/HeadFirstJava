@@ -33,4 +33,4 @@ public class TextAreal implements ActionListener{
 	public void actionPerformed(ActionEvent ev){
 		text.append("button clicked \n");
 	}
-}
+}//close
