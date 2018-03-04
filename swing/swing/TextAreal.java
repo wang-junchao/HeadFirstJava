@@ -29,7 +29,7 @@ public class TextAreal implements ActionListener{
 		frame.setSize(350,300);
 		frame.setVisible(true);
 	}
-	
+	   
 	public void actionPerformed(ActionEvent ev){
 		text.append("button clicked \n");
 	}
