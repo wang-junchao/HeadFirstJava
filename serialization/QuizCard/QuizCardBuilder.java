@@ -1,4 +1,4 @@
-package QuizCardBuilder;
+package QuizCard;
 import java.util.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -80,7 +80,7 @@ public class QuizCardBuilder {
 			cardList.add(card);
 			
 			JFileChooser fileSave=new JFileChooser();
-			fileSave,showSaveDialog(frame);
+			fileSave.showSaveDialog(frame);
 			saveFile(fileSave.getSelectedFile());	//调出存盘对话框（dialog）等待用户决定 都是考JFileChooser
 		}
 	}
