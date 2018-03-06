@@ -1,5 +1,5 @@
 package swing;
-
+import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.sound.midi.*;
@@ -41,7 +41,7 @@ public class BeatBox {
 		
 		JButton stop =new JButton("stop");
 		stop.addActionListener(new MyStopListener());
-		buttonBox.add(start);
+		buttonBox.add(stop);
 		
 		JButton upTempo=new JButton("Tempo Up");
 		upTempo.addActionListener(new MyUpTempoListener());
@@ -72,7 +72,7 @@ public class BeatBox {
 			JCheckBox c=new JCheckBox();
 			c.setSelected(false);
 			checkboxList.add(c);
-			mainPanel.add(c);
+			mainPanel.add(c);  
 		}
 		
 		setUpMidi();
@@ -124,7 +124,7 @@ public class BeatBox {
 		track.add(makeEvent(192,9,1,0,15));		//确保第16拍有事件，否则beatbox不会重复播放
 		try{
 			sequencer.setSequence(sequence);
-			sequencer.setLoopCount(sequencer.LOOP_CONTINUOUSLY);   //指定无穷的重复次数
+			sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);   //指定无穷的重复次数
 			//开始播放
 			sequencer.start();
 			sequencer.setTempoInBPM(120);
@@ -184,5 +184,47 @@ public class BeatBox {
 			event=new MidiEvent(a,tick);
 		}catch(Exception e){e.printStackTrace();}
 		return event;
+	}
+	
+	public class MySendListener implements ActionListener{
+		public void actionPerformed(ActionEvent a){	//用户按下按钮触发ActionEvent时执行
+			boolean[] checkboxState=new boolean[256];	//用来保存复选框的状态
+			for(int i=0;i<256;i++){
+				JCheckBox check=(JCheckBox) checkboxList.get(i);	//取得的状态加到数组
+				if(check.isSelected()){
+					checkboxState[i]=true;
+				}
+			}
+			
+			try{
+				FileOutputStream fileStream=new FileOutputStream(new File("Checkbox.ser"));
+				ObjectOutputStream os=new ObjectOutputStream(fileStream);
+				os.writeObject(checkboxState);
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}
+	}
+	public class MyReadInListener implements ActionListener{
+		public void actionPerformed(ActionEvent a){
+			boolean[] checkboxState=null;
+			try{
+				FileInputStream fileIn=new FileInputStream(new File("Checkbox.ser"));
+				ObjectInputStream is=new ObjectInputStream(fileIn);
+				checkboxState=(boolean[]) is.readObject();		//读取文件中的对象并读取回来的object类型换回boolean数组
+			}catch(Exception ex){ex.printStackTrace();
+		}
+			for(int i=0;i<256;i++){
+				JCheckBox check =(JCheckBox)checkboxList.get(i);
+				if(checkboxState[i]){
+					check.setSelected(true);		//还原每个checkbox的状态
+				}else{
+					check.setSelected(false);
+				}
+			}
+			
+			sequencer.stop();
+			buildTrackAndStart();		//停止目前播放的节奏并使用复选框重新创建序列
+		}
 	}
 }
