@@ -52,7 +52,7 @@ public class BeatBoxFinal {
 		setUpMidi();
 		buildGUI();
 	}
-	
+	 
 	public void buildGUI(){
 		
 		theFrame=new JFrame("Cyber BeatBox");
